@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CNC frézování různých materiálů, kusová výroba, malé série a broušení vrtáků HSS. Daniel Juříček, Valašské Meziříčí.">
+  <meta name="theme-color" content="#17212b">
+  <title>CNC frézování – Daniel Juříček</title>
+
+  <style>
+    :root {
+      --bg: #17212b;
+      --panel: #202d39;
+      --panel-light: #293845;
+      --text: #f3f5f7;
+      --muted: #bdc8d1;
+      --orange: #efa344;
+      --border: #3b4a57;
+      --max: 1120px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Segoe UI", Arial, sans-serif;
+      line-height: 1.7;
+    }
+
+    a { color: inherit; }
+
+    .container {
+      width: min(var(--max), calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    header {
+      border-bottom: 1px solid var(--border);
+      background: #131c24;
+    }
+
+    .nav {
+      min-height: 82px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      text-decoration: none;
+    }
+
+    .brand-icon {
+      width: 46px;
+      height: 46px;
+      display: grid;
+      place-items: center;
+      background: var(--orange);
+      color: var(--bg);
+      border-radius: 9px;
+      font-size: 27px;
+      font-weight: 800;
+    }
+
+    .brand-name {
+      display: block;
+      font-weight: 750;
+      font-size: 19px;
+      line-height: 1.3;
+    }
+
+    .brand-sub {
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 2px;
+    }
+
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    nav a:hover { color: var(--orange); }
+
+    .hero {
+      padding: 92px 0 80px;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse at 90% 35%, #344351 0, transparent 43%),
+        var(--bg);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 48px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      color: var(--orange);
+      font-size: 13px;
+      font-weight: 750;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 720px;
+      margin: 17px 0;
+      font-size: clamp(38px, 5vw, 60px);
+      line-height: 1.12;
+      letter-spacing: -1.5px;
+    }
+
+    h2 {
+      font-size: clamp(27px, 3.5vw, 37px);
+      line-height: 1.2;
+      margin: 0 0 16px;
+    }
+
+    h3 { line-height: 1.35; }
+
+    .lead {
+      max-width: 620px;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 13px;
+      margin-top: 28px;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 13px 20px;
+      border: 1px solid var(--orange);
+      border-radius: 6px;
+      background: var(--orange);
+      color: #19232c;
+      font-weight: 750;
+      text-decoration: none;
+      transition: transform .2s, background .2s;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+      background: #ffc16e;
+    }
+
+    .button-outline {
+      background: transparent;
+      color: var(--text);
+      border-color: var(--border);
+    }
+
+    .button-outline:hover {
+      background: var(--panel);
+    }
+
+    .hero-graphic {
+      min-height: 300px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 30px;
+      border: 1px solid #465663;
+      border-radius: 12px;
+      background:
+        linear-gradient(145deg, #344451, #202d38 65%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-graphic::before {
+      content: "";
+      position: absolute;
+      width: 220px;
+      height: 220px;
+      right: -50px;
+      top: -65px;
+      border: 24px solid #efa344;
+      border-radius: 50%;
+      opacity: .13;
+    }
+
+    .technical-mark {
+      font-size: 65px;
+      line-height: 1.2;
+      color: var(--orange);
+      font-weight: 800;
+    }
+
+    .hero-graphic strong {
+      font-size: 22px;
+      margin-top: 18px;
+    }
+
+    .hero-graphic span {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .facts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 27px;
+    }
+
+    .fact {
+      padding: 7px 12px;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      color: #d8e0e6;
+      font-size: 13px;
+    }
+
+    section { padding: 76px 0; }
+
+    .section-intro {
+      max-width: 690px;
+      color: var(--muted);
+      margin-bottom: 32px;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      padding: 27px;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      background: var(--panel);
+    }
+
+    .card-icon {
+      color: var(--orange);
+      font-size: 29px;
+    }
+
+    .card h3 {
+      font-size: 20px;
+      margin: 10px 0;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .technical {
+      background: #202b35;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 30px;
+    }
+
+    .tech-item {
+      padding: 22px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+
+    .tech-item span {
+      color: var(--orange);
+      font-size: 12px;
+      font-weight: 750;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .tech-item h3 { margin-bottom: 7px; }
+
+    .tech-item p {
+      color: var(--muted);
+      margin: 0;
+      font-size: 14px;
+    }
+
+    .process-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+      margin-top: 30px;
+    }
+
+    .process-item {
+      border-left: 3px solid var(--orange);
+      padding-left: 17px;
+    }
+
+    .process-item p {
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    .contact-panel {
+      padding: 40px;
+      border: 1px solid #475967;
+      border-radius: 12px;
+      background: linear-gradient(130deg, #293946, #1c2833);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 35px;
+      align-items: center;
+    }
+
+    .contact-panel p { color: var(--muted); }
+
+    .contact-links {
+      display: grid;
+      gap: 13px;
+    }
+
+    .contact-link {
+      display: block;
+      padding: 15px 17px;
+      background: #17212b;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      text-decoration: none;
+      overflow-wrap: anywhere;
+    }
+
+    .contact-link small {
+      display: block;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .contact-link strong { color: var(--orange); }
+
+    footer {
+      padding: 27px 0;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 760px) {
+      .nav {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 17px 0;
+        gap: 13px;
+      }
+
+      nav { gap: 15px; }
+
+      .hero { padding: 58px 0; }
+
+      .hero-grid,
+      .contact-panel {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-grid { gap: 30px; }
+
+      .hero-graphic { min-height: 220px; }
+
+      .services-grid,
+      .tech-grid,
+      .process-grid {
+        grid-template-columns: 1fr;
+      }
+
+      section { padding: 55px 0; }
+
+      .contact-panel { padding: 25px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after {
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="container nav">
+      <a class="brand" href="#domu" aria-label="CNC frézování – úvod">
+        <span class="brand-icon" aria-hidden="true">⚙</span>
+        <span>
+          <span class="brand-name">CNC frézování</span>
+          <span class="brand-sub">DANIEL JUŘÍČEK</span>
+        </span>
+      </a>
+
+      <nav aria-label="Hlavní navigace">
+        <a href="#sluzby">Služby</a>
+        <a href="#vybaveni">Vybavení</a>
+        <a href="#spoluprace">Spolupráce</a>
+        <a href="#kontakt">Kontakt</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="domu">
+      <div class="container hero-grid">
+        <div>
+          <div class="eyebrow">CNC obrábění · Valašské Meziříčí</div>
+          <h1>CNC frézování různých materiálů.</h1>
+          <p class="lead">
+            Kusová výroba a malé série podle výkresů nebo 3D modelů.
+            Individuální přístup ke každé zakázce.
+          </p>
+
+          <div class="actions">
+            <a class="button"
+               href="mailto:cnc-frezovani@seznam.cz?subject=Popt%C3%A1vka%20CNC%20fr%C3%A9zov%C3%A1n%C3%AD">
+              Poptat výrobu
+            </a>
+            <a class="button button-outline" href="tel:+420723119524">
+              Zavolat
+            </a>
+          </div>
+
+          <div class="facts">
+            <span class="fact">Kusová výroba</span>
+            <span class="fact">Malé série</span>
+            <span class="fact">Broušení HSS</span>
+          </div>
+        </div>
+
+        <div class="hero-graphic" aria-label="Technické vybavení CNC dílny">
+          <div class="technical-mark" aria-hidden="true">CNC</div>
+          <strong>Od výkresu k hotovému dílu.</strong>
+          <span>Technická příprava a obrábění podle možností zakázky.</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="sluzby">
+      <div class="container">
+        <div class="eyebrow">Nabídka služeb</div>
+        <h2>S čím vám mohu pomoci</h2>
+        <p class="section-intro">
+          Zaměřuji se na zakázkovou výrobu součástí a služby pro
+          strojírenské a výrobní firmy. Konkrétní možnosti vždy
+          posoudím podle požadovaného dílu, materiálu a podkladů.
+        </p>
+
+        <div class="services-grid">
+          <article class="card">
+            <div class="card-icon" aria-hidden="true">⚙</div>
+            <h3>CNC frézování</h3>
+            <p>
+              Kusová výroba a malé série z hliníku, dalších kovů,
+              technických plastů a jiných materiálů podle možností
+              stroje a konkrétní zakázky.
+            </p>
+          </article>
+
+          <article class="card">
+            <div class="card-icon" aria-hidden="true">▤</div>
+            <h3>Výroba podle výkresu nebo 3D modelu</h3>
+            <p>
+              Výroba součástí podle dodané technické dokumentace
+              nebo 3D modelu. Možnost zpracování podkladů před
+              zahájením výroby.
+            </p>
+          </article>
+
+          <article class="card">
+            <div class="card-icon" aria-hidden="true">⌘</div>
+            <h3>Návrh a vývoj dílů</h3>
+            <p>
+              Návrh nebo úprava dílu po předchozí konzultaci.
+              Rozsah spolupráce a technické možnosti se domlouvají
+              individuálně.
+            </p>
+          </article>
+
+          <article class="card">
+            <div class="card-icon" aria-hidden="true">↗</div>
+            <h3>Broušení vrtáků HSS</h3>
+            <p>
+              Broušení spirálových vrtáků z rychlořezné oceli HSS
+              na brusce určené pro broušení vrtáků.
+            </p>
+          </article>
+
+          <article class="card">
+            <div class="card-icon" aria-hidden="true">＋</div>
+            <h3>Broušení dalších nástrojů</h3>
+            <p>
+              Po předchozí domluvě lze zprostředkovat externí
+              broušení tvrdokovových vrtáků, fréz a dalších
+              řezných nástrojů.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="technical" id="vybaveni">
+      <div class="container">
+        <div class="eyebrow">Technické zázemí</div>
+        <h2>Vybavení dílny</h2>
+        <p class="section-intro">
+          Výroba a příprava obrábění s využitím dostupného
+          strojního a softwarového vybavení.
+        </p>
+
+        <div class="tech-grid">
+          <div class="tech-item">
+            <span>CNC stroj</span>
+            <h3>FNG 40 CNC</h3>
+            <p>Tříosé CNC frézování.</p>
+          </div>
+
+          <div class="tech-item">
+            <span>Řízení</span>
+            <h3>Heidenhain TNC 415</h3>
+            <p>Řídicí systém CNC frézky.</p>
+          </div>
+
+          <div class="tech-item">
+            <span>CAD/CAM</span>
+            <h3>Autodesk Fusion 360</h3>
+            <p>Software pro konstrukční a obráběcí přípravu.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="spoluprace">
+      <div class="container">
+        <div class="eyebrow">Jak začít</div>
+        <h2>Jednoduchý postup spolupráce</h2>
+
+        <div class="process-grid">
+          <div class="process-item">
+            <h3>01. Zašlete podklady</h3>
+            <p>
+              Pošlete výkres, 3D model nebo popis požadovaného dílu.
+              Uveďte materiál a požadované množství, pokud je znáte.
+            </p>
+          </div>
+
+          <div class="process-item">
+            <h3>02. Probereme možnosti</h3>
+            <p>
+              Posoudíme proveditelnost, dostupné podklady a další
+              podmínky zakázky.
+            </p>
+          </div>
+
+          <div class="process-item">
+            <h3>03. Domluvíme postup</h3>
+            <p>
+              Po upřesnění požadavků se domluvíme na ceně,
+              termínu a dalším postupu.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="kontakt">
+      <div class="container">
+        <div class="contact-panel">
+          <div>
+            <div class="eyebrow">Kontakt</div>
+            <h2>Máte díl k výrobě?</h2>
+            <p>
+              Ozvěte se mi s nezávaznou poptávkou.
+              Rád s vámi proberu možnosti výroby nebo broušení
+              nástrojů.
+            </p>
+            <p>Daniel Juříček<br>Valašské Meziříčí a okolí</p>
+          </div>
+
+          <div class="contact-links">
+            <a class="contact-link" href="tel:+420723119524">
+              <small>Telefon</small>
+              <strong>+420 723 119 524</strong>
+            </a>
+
+            <a class="contact-link"
+               href="mailto:cnc-frezovani@seznam.cz?subject=Popt%C3%A1vka%20slu%C5%BEeb">
+              <small>E-mail</small>
+              <strong>cnc-frezovani@seznam.cz</strong>
+            </a>
+
+            <a class="button"
+               href="mailto:cnc-frezovani@seznam.cz?subject=Popt%C3%A1vka%20CNC%20fr%C3%A9zov%C3%A1n%C3%AD">
+              Napsat poptávku
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <span>CNC frézování – Daniel Juříček</span>
+      <span>Valašské Meziříčí · <span id="rok"></span></span>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("rok").textContent =
+      new Date().getFullYear();
+  </script>
+</body>
+</html>
